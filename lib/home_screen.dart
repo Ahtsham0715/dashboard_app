@@ -40,7 +40,13 @@ class _MyHomePageState extends State<MyHomePage>
                 Expanded(
                   flex: 6,
                   child: Container(
-                      decoration: _boxDecoration, child: const TabPanel()),
+                      decoration: _boxDecoration, child: 
+                      // const Center(
+                        // child: CircularProgressIndicator(),
+                      // )
+                      const TabPanel()
+                      
+                      ),
                 )
               ],
             ),

@@ -4,16 +4,18 @@ import 'dart:ui';
 import 'package:dashboard_app/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:window_size/window_size.dart';
 import 'package:http/http.dart' as http;
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     setWindowTitle("App Name");
     setWindowMinSize(const Size(1100, 720));
     setWindowMaxSize(Size.infinite);
   }
+  await GetStorage.init();
   runApp(const MyApp());
 }
 
@@ -71,8 +73,8 @@ class _LoginPageState extends State<LoginPage> {
 
     if (response.statusCode == 200) {
       Get.snackbar('Singin Successful', '');
-      // response.body;
-      Get.to(() => MyHomePage(), arguments: {
+      // jsonDecode(response.body);
+      Get.to(() => const MyHomePage(), arguments: {
         "addressList": [
           {
             "address": "0xf8b4dFbEEeaffF2E317FFE502d439F174CF7B11a",
@@ -113,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
           }
         ]
       };
-      // var error_details = response.body;
+      // var error_details = jsonDecode(response.body);
       Get.snackbar("${error_details['details']?[0]['type']}", "${error_details['details']?[0]['msg']} \n ${error_details['details']?[0]['loc']}");
     } else if (response.statusCode == 500) {
       // print('Internal Error');
@@ -151,6 +153,7 @@ class _LoginPageState extends State<LoginPage> {
     if (response.statusCode == 200) {
       Get.snackbar('Singup Successful', '');
       // response.body;
+      jsonDecode(response.body);
       Get.to(() => MyHomePage(), arguments: {
         "addressList": [
           {
@@ -191,7 +194,8 @@ class _LoginPageState extends State<LoginPage> {
           }
         ]
       };
-      // var error_details = response.body;
+      
+      // var error_details = jsonDecode(response.body);
       Get.snackbar("${error_details['details']?[0]['type']}", "${error_details['details']?[0]['msg']} \n ${error_details['details']?[0]['loc']}");
     } else if (response.statusCode == 500) {
       // print('Internal Error');

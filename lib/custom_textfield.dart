@@ -71,6 +71,8 @@ Widget customTextFormField(
               contentPadding: EdgeInsets.all(8),
               border: InputBorder.none,
             ),
+            // keyboardType: (title == "Price") ?
+            // TextInputType.number : TextInputType.text,
             inputFormatters: (title == "Price")
                 ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]
                 : null,
