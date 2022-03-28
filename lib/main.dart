@@ -49,6 +49,8 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _password = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  final addressBox = GetStorage('address_box');
+
   Widget _customButton(title, _onPressed) {
     return SizedBox(
       height: 48,
@@ -74,6 +76,7 @@ class _LoginPageState extends State<LoginPage> {
     if (response.statusCode == 200) {
       Get.snackbar('Singin Successful', '');
       // jsonDecode(response.body);
+      addressBox.erase();
       Get.to(() => const MyHomePage(), arguments: {
         "addressList": [
           {
@@ -154,6 +157,7 @@ class _LoginPageState extends State<LoginPage> {
       Get.snackbar('Singup Successful', '');
       // response.body;
       jsonDecode(response.body);
+      addressBox.erase();
       Get.to(() => MyHomePage(), arguments: {
         "addressList": [
           {
@@ -346,6 +350,7 @@ class _LoginPageState extends State<LoginPage> {
                         // Navigator.of(context).push(MaterialPageRoute(
                         //     builder: (context) => const MyHomePage()));
                         // login_func();
+      addressBox.erase();
                          Get.to(() => MyHomePage(), arguments: {
         "addressList": [
           {

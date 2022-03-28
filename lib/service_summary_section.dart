@@ -1,6 +1,7 @@
 import 'package:dashboard_app/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart' as intl;
 
 class ServiceSummarySection extends StatefulWidget {
@@ -17,6 +18,7 @@ class _ServiceSummarySectionState extends State<ServiceSummarySection> {
   int licenseNumber = 12345789;
   var args = Get.arguments;
   Map? license_data;
+  final addressBox = GetStorage('address_box');
   @override
   Widget build(BuildContext context) {
     license_data = args['license_info'];

@@ -2,6 +2,7 @@ import 'package:dashboard_app/custom_textfield.dart';
 import 'package:dashboard_app/service_summary_section.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class AddressSummarySection extends StatefulWidget {
   const AddressSummarySection({Key? key}) : super(key: key);
@@ -13,7 +14,7 @@ class AddressSummarySection extends StatefulWidget {
 class _AddressSummarySectionState extends State<AddressSummarySection> {
 
   var args = Get.arguments;
-
+  final addressBox = GetStorage('address_box');
   double balance = 2500;
   int transactions = 5;
   List? _registeredAddresses ;
@@ -90,10 +91,12 @@ class _AddressSummarySectionState extends State<AddressSummarySection> {
                   onChanged: (newValue) {
                     setState(() {
                       _selectedAddress = newValue as String;
+                      addressBox.write('selected_address', _selectedAddress);
                       _registeredAddresses?.forEach((address) {
                         if(address['address'] == _selectedAddress){
                           _selectedAddressdata = address;
                         }
+                        addressBox.write('address_data', address);
                       });
                       setState(() {
                         
