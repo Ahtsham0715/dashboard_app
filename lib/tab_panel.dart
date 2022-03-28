@@ -83,22 +83,35 @@ class _TabPanelState extends State<TabPanel>
       Get.snackbar('Task Created', '');
       // jsonDecode(response.body);
       //successful operation
+       tasks = jsonDecode(response.body);
+      List totalTasks = tasks['tasklist'];
+    for (var task in totalTasks) {
+      if (task['status'] == "active") {
+        activetasks.add(task);
+        _activeformKey.add(GlobalKey<FormState>());
+        _activeaddressController
+            .add(TextEditingController(text: tasks['address'].toString()));
+        _activepriceController
+            .add(TextEditingController(text: task['price'].toString()));
+        _activefunctionController
+            .add(TextEditingController(text: task['called'].toString()));
+      } else {
+        inactivetasks.add(task);
+        _inactiveformKey.add(GlobalKey<FormState>());
+        _inactiveaddressController
+            .add(TextEditingController(text: tasks['address'].toString()));
+        _inactivepriceController
+            .add(TextEditingController(text: task['price'].toString()));
+        _inactivefunctionController
+            .add(TextEditingController(text: task['called'].toString()));
+      }
+    }
     } else if (response.statusCode == 404) {
       // print('not found');
       Get.snackbar('Not Found', '');
     } else if (response.statusCode == 422) {
       // print('Validation error');
-
-      var error_details = {
-        "detail": [
-          {
-            "loc": ["string"],
-            "msg": "string",
-            "type": "string"
-          }
-        ]
-      };
-      // var error_details = jsonDecode(response.body);
+      var error_details = jsonDecode(response.body);
       Get.snackbar("${error_details['details']?[0]['type']}",
           "${error_details['details']?[0]['msg']} \n ${error_details['details']?[0]['loc']}");
     } else if (response.statusCode == 500) {
@@ -124,32 +137,12 @@ class _TabPanelState extends State<TabPanel>
       headers: {'Content-type': 'application/json'},
     ); //update task url here
 
-    tasks = {
-      "address": "0xf8b4dFbEEeaffF2E317FFE502d439F174CF7B11a",
-      "balance": 3.5678,
-      "transactions": 12,
-      "tasklist": [
-        {
-          "id": "6d80ccef-fd63-40f1-909a-d318ae2d7452",
-          "contract": "0x84d6dfAa9d915fD675D075e91a27f484215Ad345",
-          "called": "notify",
-          "price": 0.1,
-          "option": false,
-          "time": "2022-03-27T07:23:04.080Z",
-          "status": "active"
-        },
-        {
-          "id": "6d80ccef-fd63-40f1-909a24f85dsae2d7452",
-          "contract": "0x84d6dfAa9d9531489875D075e91a27f484215Ad345",
-          "called": "notify",
-          "price": 0.15,
-          "option": true,
-          "time": "2021-04-20T07:23:04.080Z",
-          "status": "inactive"
-        }
-      ]
-    };
-    List totalTasks = tasks['tasklist'];
+    if (response.statusCode == 200) {
+      Get.snackbar('Task Created', '');
+      // jsonDecode(response.body);
+      // successful operation
+      tasks = jsonDecode(response.body);
+      List totalTasks = tasks['tasklist'];
     for (var task in totalTasks) {
       if (task['status'] == "active") {
         activetasks.add(task);
@@ -171,50 +164,12 @@ class _TabPanelState extends State<TabPanel>
             .add(TextEditingController(text: task['called'].toString()));
       }
     }
-
-    if (response.statusCode == 200) {
-      Get.snackbar('Task Created', '');
-      // jsonDecode(response.body);
-      //successful operation
-      // tasks = jsonDecode(response.body);
-    //   List totalTasks = tasks['tasklist'];
-    // for (var task in totalTasks) {
-    //   if (task['status'] == "active") {
-    //     activetasks.add(task);
-    //     _activeformKey.add(GlobalKey<FormState>());
-    //     _activeaddressController
-    //         .add(TextEditingController(text: tasks['address'].toString()));
-    //     _activepriceController
-    //         .add(TextEditingController(text: task['price'].toString()));
-    //     _activefunctionController
-    //         .add(TextEditingController(text: task['called'].toString()));
-    //   } else {
-    //     inactivetasks.add(task);
-    //     _inactiveformKey.add(GlobalKey<FormState>());
-    //     _inactiveaddressController
-    //         .add(TextEditingController(text: tasks['address'].toString()));
-    //     _inactivepriceController
-    //         .add(TextEditingController(text: task['price'].toString()));
-    //     _inactivefunctionController
-    //         .add(TextEditingController(text: task['called'].toString()));
-    //   }
-    // }
     } else if (response.statusCode == 404) {
       // print('not found');
       Get.snackbar('Not Found', '');
     } else if (response.statusCode == 422) {
       // print('Validation error');
-
-      var error_details = {
-        "detail": [
-          {
-            "loc": ["string"],
-            "msg": "string",
-            "type": "string"
-          }
-        ]
-      };
-      // var error_details = jsonDecode(response.body);
+      var error_details = jsonDecode(response.body);
       Get.snackbar("${error_details['details']?[0]['type']}",
           "${error_details['details']?[0]['msg']} \n ${error_details['details']?[0]['loc']}");
     } else if (response.statusCode == 500) {
@@ -227,35 +182,13 @@ class _TabPanelState extends State<TabPanel>
   }
 
   Future<void> _gettasks() async {
-    // var response = await http.get(
-    //   Uri.parse(''),
-    // ); //tasks url here
+    var response = await http.get(
+      Uri.parse(''),
+    ); //tasks url here
 
-    tasks = {
-      "address": "0xf8b4dFbEEeaffF2E317FFE502d439F174CF7B11a",
-      "balance": 3.5678,
-      "transactions": 12,
-      "tasklist": [
-        {
-          "id": "6d80ccef-fd63-40f1-909a-d318ae2d7452",
-          "contract": "0x84d6dfAa9d915fD675D075e91a27f484215Ad345",
-          "called": "notify",
-          "price": 0.1,
-          "option": false,
-          "time": "2022-03-27T07:23:04.080Z",
-          "status": "active"
-        },
-        {
-          "id": "6d80ccef-fd63-40f1-909a24f85dsae2d7452",
-          "contract": "0x84d6dfAa9d9531489875D075e91a27f484215Ad345",
-          "called": "notify",
-          "price": 0.15,
-          "option": true,
-          "time": "2021-04-20T07:23:04.080Z",
-          "status": "inactive"
-        }
-      ]
-    };
+    if (response.statusCode == 200) {
+      tasks = jsonDecode(response.body);
+      //successful operation
     List totalTasks = tasks['tasklist'];
     for (var task in totalTasks) {
       if (task['status'] == "active") {
@@ -278,59 +211,21 @@ class _TabPanelState extends State<TabPanel>
             .add(TextEditingController(text: task['called'].toString()));
       }
     }
-    print(activetasks);
-    print(inactivetasks);
-
-    // if (response.statusCode == 200) {
-    //   // tasks = jsonDecode(response.body);
-    //   //successful operation
-    // List totalTasks = tasks['tasklist'];
-    // for (var task in totalTasks) {
-    //   if (task['status'] == "active") {
-    //     activetasks.add(task);
-    //     _activeformKey.add(GlobalKey<FormState>());
-    //     _activeaddressController
-    //         .add(TextEditingController(text: tasks['address'].toString()));
-    //     _activepriceController
-    //         .add(TextEditingController(text: task['price'].toString()));
-    //     _activefunctionController
-    //         .add(TextEditingController(text: task['called'].toString()));
-    //   } else {
-    //     inactivetasks.add(task);
-    //     _inactiveformKey.add(GlobalKey<FormState>());
-    //     _inactiveaddressController
-    //         .add(TextEditingController(text: tasks['address'].toString()));
-    //     _inactivepriceController
-    //         .add(TextEditingController(text: task['price'].toString()));
-    //     _inactivefunctionController
-    //         .add(TextEditingController(text: task['called'].toString()));
-    //   }
-    // }
-    // } else if (response.statusCode == 404) {
-    //   // print('not found');
-    //   Get.snackbar('Not Found', '');
-    // } else if (response.statusCode == 422) {
-    //   // print('Validation error');
-
-    //   var error_details = {
-    //     "detail": [
-    //       {
-    //         "loc": ["string"],
-    //         "msg": "string",
-    //         "type": "string"
-    //       }
-    //     ]
-    //   };
-    //   // var error_details = jsonDecode(response.body);
-    //   Get.snackbar("${error_details['details']?[0]['type']}",
-    //       "${error_details['details']?[0]['msg']} \n ${error_details['details']?[0]['loc']}");
-    // } else if (response.statusCode == 500) {
-    //   // print('Internal Error');
-    //   Get.snackbar('Internal Error', '');
-    // } else {
-    //   // print('Error Occured. Try Again');
-    //   Get.snackbar('Error Occured. Try Again', '');
-    // }
+    } else if (response.statusCode == 404) {
+      // print('not found');
+      Get.snackbar('Not Found', '');
+    } else if (response.statusCode == 422) {
+    
+      var error_details = jsonDecode(response.body);
+      Get.snackbar("${error_details['details']?[0]['type']}",
+          "${error_details['details']?[0]['msg']} \n ${error_details['details']?[0]['loc']}");
+    } else if (response.statusCode == 500) {
+      // print('Internal Error');
+      Get.snackbar('Internal Error', '');
+    } else {
+      // print('Error Occured. Try Again');
+      Get.snackbar('Error Occured. Try Again', '');
+    }
   }
 
   @override
@@ -493,6 +388,8 @@ class _TabPanelState extends State<TabPanel>
                                                         .validate()) {
                                                       // buttonsIndex[index] =
                                                       //     !pressedButton;
+                                                      _updatetask(activetasks[index]['id'], activetasks[index]['status']);
+
                                                     }
                                                   });
                                                 }),
@@ -624,6 +521,7 @@ class _TabPanelState extends State<TabPanel>
                                                         .validate()) {
                                                       // buttonsIndex[index] =
                                                       //     !pressedButton;
+                                                      _updatetask(inactivetasks[index]['id'], inactivetasks[index]['status']);
                                                     }
                                                   });
                                                 }),
@@ -840,8 +738,8 @@ class _TabPanelState extends State<TabPanel>
                                     onPressed: () {
                                       if (_createformKey.currentState!
                                           .validate()) {
-                                            // _createtask();
-                                        Navigator.pop(context);
+                                            _createtask();
+                                        // Navigator.pop(context);
                                       }
                                     }),
                               )

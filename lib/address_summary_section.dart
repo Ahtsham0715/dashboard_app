@@ -18,11 +18,7 @@ class _AddressSummarySectionState extends State<AddressSummarySection> {
   double balance = 2500;
   int transactions = 5;
   List? _registeredAddresses ;
-  // [
-  //   'Address1',
-  //   'Address2',
-  //   'Address3',
-  // ];
+ 
   String? _selectedAddress;
   Map? _selectedAddressdata;
 

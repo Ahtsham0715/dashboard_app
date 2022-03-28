@@ -77,49 +77,18 @@ class _LoginPageState extends State<LoginPage> {
       Get.snackbar('Singin Successful', '');
       // jsonDecode(response.body);
       addressBox.erase();
-      Get.to(() => const MyHomePage(), arguments: {
-        "addressList": [
-          {
-            "address": "0xf8b4dFbEEeaffF2E317FFE502d439F174CF7B11a",
-            "balance": 3.5678,
-            "transactions": 12,
-            "tasklist": [
-              {
-                "id": "6d80ccef-fd63-40f1-909a-d318ae2d7452",
-                "contract": "0x84d6dfAa9d915fD675D075e91a27f484215Ad345",
-                "called": "notify",
-                "price": 0.1,
-                "option": false,
-                "time": "2022-03-26T14:21:26.939Z",
-                "status": "active"
-              }
-            ]
-          }
-        ],
-        "license_info": {
-          "license_address": "0xf8b4dFbEEeaffF2E317FFE502d439F174CF7B11a",
-          "expiration_time": "2022-03-26T14:21:26.939Z",
-          "image": "string"
-        }
-      });
+      Get.to(() => const MyHomePage(), arguments: jsonDecode(response.body)
+        
+          );
       //successful operation
     } else if (response.statusCode == 404) {
       // print('not found');
       Get.snackbar('Not Found', '');
     } else if (response.statusCode == 422) {
-      // print('Validation error');
-      
-      var error_details = {
-        "detail": [
-          {
-            "loc": ["string"],
-            "msg": "string",
-            "type": "string"
-          }
-        ]
-      };
-      // var error_details = jsonDecode(response.body);
-      Get.snackbar("${error_details['details']?[0]['type']}", "${error_details['details']?[0]['msg']} \n ${error_details['details']?[0]['loc']}");
+    
+      var error_details = jsonDecode(response.body);
+      Get.snackbar("${error_details['details']?[0]['type']}",
+          "${error_details['details']?[0]['msg']} \n ${error_details['details']?[0]['loc']}");
     } else if (response.statusCode == 500) {
       // print('Internal Error');
       Get.snackbar('Internal Error', '');
@@ -148,59 +117,28 @@ class _LoginPageState extends State<LoginPage> {
     Map body = {"message": data};
 
     var response = await http.post(
-      Uri.parse(''),
+      Uri.parse(''), //singup url here
       body: jsonEncode(body),
       headers: {'Content-type': 'application/json'},
-    ); //singup url here
+    );
 
     if (response.statusCode == 200) {
       Get.snackbar('Singup Successful', '');
       // response.body;
-      jsonDecode(response.body);
+      // jsonDecode(response.body);
       addressBox.erase();
-      Get.to(() => MyHomePage(), arguments: {
-        "addressList": [
-          {
-            "address": "0xf8b4dFbEEeaffF2E317FFE502d439F174CF7B11a",
-            "balance": 3.5678,
-            "transactions": 12,
-            "tasklist": [
-              {
-                "id": "6d80ccef-fd63-40f1-909a-d318ae2d7452",
-                "contract": "0x84d6dfAa9d915fD675D075e91a27f484215Ad345",
-                "called": "notify",
-                "price": 0.1,
-                "option": false,
-                "time": "2022-03-26T14:21:26.939Z",
-                "status": "active"
-              }
-            ]
-          }
-        ],
-        "license_info": {
-          "license_address": "0xf8b4dFbEEeaffF2E317FFE502d439F174CF7B11a",
-          "expiration_time": "2022-03-26T14:21:26.939Z",
-          "image": "string"
-        }
-      });
+      Get.to(() => MyHomePage(), arguments: jsonDecode(response.body)
+        
+          );
       //successful operation
     } else if (response.statusCode == 404) {
       // print('not found');
       Get.snackbar('Not Found', '');
     } else if (response.statusCode == 422) {
-      // print('Validation error');
-      var error_details = {
-        "detail": [
-          {
-            "loc": ["string"],
-            "msg": "string",
-            "type": "string"
-          }
-        ]
-      };
-      
-      // var error_details = jsonDecode(response.body);
-      Get.snackbar("${error_details['details']?[0]['type']}", "${error_details['details']?[0]['msg']} \n ${error_details['details']?[0]['loc']}");
+    
+      var error_details = jsonDecode(response.body);
+      Get.snackbar("${error_details['details']?[0]['type']}",
+          "${error_details['details']?[0]['msg']} \n ${error_details['details']?[0]['loc']}");
     } else if (response.statusCode == 500) {
       // print('Internal Error');
       Get.snackbar('Internal Error', '');
@@ -349,33 +287,33 @@ class _LoginPageState extends State<LoginPage> {
                       if (_formKey.currentState!.validate()) {
                         // Navigator.of(context).push(MaterialPageRoute(
                         //     builder: (context) => const MyHomePage()));
-                        // login_func();
-      addressBox.erase();
-                         Get.to(() => MyHomePage(), arguments: {
-        "addressList": [
-          {
-            "address": "0xf8b4dFbEEeaffF2E317FFE502d439F174CF7B11a",
-            "balance": 3.5678,
-            "transactions": 12,
-            "tasklist": [
-              {
-                "id": "6d80ccef-fd63-40f1-909a-d318ae2d7452",
-                "contract": "0x84d6dfAa9d915fD675D075e91a27f484215Ad345",
-                "called": "notify",
-                "price": 0.1,
-                "option": false,
-                "time": "2022-03-26T14:21:26.939Z",
-                "status": "active"
-              }
-            ]
-          }
-        ],
-        "license_info": {
-          "license_address": "0xf8b4dFbEEeaffF2E317FFE502d439F174CF7B11a",
-          "expiration_time": "2022-03-26T14:21:26.939Z",
-          "image": "string"
-        }
-      });
+                        login_func();
+                        // addressBox.erase();
+                        //                    Get.to(() => MyHomePage(), arguments: {
+                        //   "addressList": [
+                        //     {
+                        //       "address": "0xf8b4dFbEEeaffF2E317FFE502d439F174CF7B11a",
+                        //       "balance": 3.5678,
+                        //       "transactions": 12,
+                        //       "tasklist": [
+                        //         {
+                        //           "id": "6d80ccef-fd63-40f1-909a-d318ae2d7452",
+                        //           "contract": "0x84d6dfAa9d915fD675D075e91a27f484215Ad345",
+                        //           "called": "notify",
+                        //           "price": 0.1,
+                        //           "option": false,
+                        //           "time": "2022-03-26T14:21:26.939Z",
+                        //           "status": "active"
+                        //         }
+                        //       ]
+                        //     }
+                        //   ],
+                        //   "license_info": {
+                        //     "license_address": "0xf8b4dFbEEeaffF2E317FFE502d439F174CF7B11a",
+                        //     "expiration_time": "2022-03-26T14:21:26.939Z",
+                        //     "image": "string"
+                        //   }
+                        // });
                       }
                     })),
                     const SizedBox(
