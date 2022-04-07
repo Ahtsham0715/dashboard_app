@@ -68,8 +68,8 @@ class _LoginPageState extends State<LoginPage> {
     Map body = {"message": data};
 
     var response = await http.post(
-      Uri.parse(''),
-      body: jsonEncode(body),
+      Uri.parse('http://localhost:8000/api/v1/auth/login'),
+      body: jsonEncode(data),
       headers: {'Content-type': 'application/json'},
     ); //login url here
 
@@ -111,14 +111,17 @@ class _LoginPageState extends State<LoginPage> {
       "word9": _userName[8].text,
       "word10": _userName[9].text,
       "word11": _userName[10].text,
-      "word12": _userName[11].text
+      "word12": _userName[11].text,
+      'password': _password.text,
     };
 
-    Map body = {"message": data};
+    print(data);
+
+    // Map body = {"message": data};
 
     var response = await http.post(
-      Uri.parse(''), //singup url here
-      body: jsonEncode(body),
+      Uri.parse('http://localhost:8000/api/v1/auth/signup'), //singup url here
+      body: jsonEncode(data),
       headers: {'Content-type': 'application/json'},
     );
 
@@ -137,7 +140,8 @@ class _LoginPageState extends State<LoginPage> {
     } else if (response.statusCode == 422) {
     
       var error_details = jsonDecode(response.body);
-      Get.snackbar("${error_details['details']?[0]['type']}",
+      print(error_details);
+      Get.snackbar("422 ${error_details['details']?[0]['type']}",
           "${error_details['details']?[0]['msg']} \n ${error_details['details']?[0]['loc']}");
     } else if (response.statusCode == 500) {
       // print('Internal Error');
@@ -288,7 +292,7 @@ class _LoginPageState extends State<LoginPage> {
                         // Navigator.of(context).push(MaterialPageRoute(
                         //     builder: (context) => const MyHomePage()));
                         login_func();
-                        // addressBox.erase();
+                        addressBox.erase();
                         //                    Get.to(() => MyHomePage(), arguments: {
                         //   "addressList": [
                         //     {

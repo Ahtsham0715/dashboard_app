@@ -62,25 +62,26 @@ class _TabPanelState extends State<TabPanel>
     Map data = {
       "address": addressBox.read('selected_address').toString(),
       "task": {
-        "id": _createidController.text.toString(),
+        // "id": _createidController.text.toString(),
         "contract": _createcontractController.text.toString(),
         "called": _createfunctionController.text.toString(),
         "price": double.parse(_createpriceController.text.toString()),
-        "option": _createoptionController.text.toString(),
-        "time": intl.DateFormat.yMd().format(date).toString()
+        "option": _createoptionController.text,
+        "time": date.toString()
       }
     };
 
     Map body = {"message": data};
 
     var response = await http.post(
-      Uri.parse(''),
-      body: jsonEncode(body),
+      Uri.parse('http://localhost:8000/api/v1/tasks/create'),
+      body: jsonEncode(data),
       headers: {'Content-type': 'application/json'},
     ); //create task url here
 
     if (response.statusCode == 200) {
       Get.snackbar('Task Created', '');
+      Navigator.pop(context);
       // jsonDecode(response.body);
       //successful operation
        tasks = jsonDecode(response.body);
@@ -112,6 +113,7 @@ class _TabPanelState extends State<TabPanel>
     } else if (response.statusCode == 422) {
       // print('Validation error');
       var error_details = jsonDecode(response.body);
+      print(error_details);
       Get.snackbar("${error_details['details']?[0]['type']}",
           "${error_details['details']?[0]['msg']} \n ${error_details['details']?[0]['loc']}");
     } else if (response.statusCode == 500) {
@@ -128,12 +130,12 @@ class _TabPanelState extends State<TabPanel>
         "id": id,
         "status": status,
     };
-
+    var address = addressBox.read('selected_address');
     Map body = {"message": data};
 
     var response = await http.post(
-      Uri.parse(''),
-      body: jsonEncode(body),
+      Uri.parse('http://localhost:8000/api/v1/tasks/$address/update-task'),
+      body: jsonEncode(data),
       headers: {'Content-type': 'application/json'},
     ); //update task url here
 
@@ -182,8 +184,11 @@ class _TabPanelState extends State<TabPanel>
   }
 
   Future<void> _gettasks() async {
+
+    var address = addressBox.read('selected_address');
+
     var response = await http.get(
-      Uri.parse(''),
+      Uri.parse('http://localhost:8000/api/v1/tasks/${address}/get-tasks-info'),
     ); //tasks url here
 
     if (response.statusCode == 200) {
@@ -270,11 +275,12 @@ class _TabPanelState extends State<TabPanel>
                     controller: _tabController,
                     children: [
                       // Active Tab
-                      activetasks.isEmpty
-                          ? const Center(
-                              child: CircularProgressIndicator(),
-                            )
-                          : ListView.builder(
+                      // activetasks.isEmpty
+                      //     ? const Center(
+                      //         child: Text('No Task Available'),
+                      //       )
+                      //     : 
+                      ListView.builder(
                               controller: _scrollController,
                               itemCount: activetasks.length,
                               itemBuilder: (context, index) {
@@ -402,11 +408,12 @@ class _TabPanelState extends State<TabPanel>
                               },
                             ),
                       // Passed Tab
-                      inactivetasks.isEmpty
-                          ? const Center(
-                              child: CircularProgressIndicator(),
-                            )
-                          : ListView.builder(
+                      // inactivetasks.isEmpty
+                      //     ? const Center(
+                      //         child: Text('No Task Available'),
+                      //       )
+                      //     : 
+                          ListView.builder(
                               controller: _scrollController,
                               itemCount: inactivetasks.length,
                               itemBuilder: (context, index) {
