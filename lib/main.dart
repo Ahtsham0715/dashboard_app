@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'App Name',
+      title: 'Task Api',
       darkTheme:
           ThemeData(primarySwatch: Colors.purple, brightness: Brightness.dark),
       theme: ThemeData(primarySwatch: Colors.purple),
