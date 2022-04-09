@@ -55,8 +55,19 @@ class _TabPanelState extends State<TabPanel>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _boxlistener();
     _gettasks();
   }
+
+      Future<void> _boxlistener() async {
+        addressBox.listen(() {
+          // setState(() {
+            _gettasks();
+            // print(addressBox.read('selected_address'));
+              
+          // });
+        });
+      }
 
   Future<void> _createtask() async {
     Map data = {
@@ -127,14 +138,14 @@ class _TabPanelState extends State<TabPanel>
 
   Future<void> _updatetask(id, status) async {
     Map data = {
-        "id": id,
-        "status": status,
+        "id": id.toString(),
+        "status": status.toString(),
     };
     var address = addressBox.read('selected_address');
     Map body = {"message": data};
 
     var response = await http.post(
-      Uri.parse('http://localhost:8000/api/v1/tasks/$address/update-task'),
+      Uri.parse('http://localhost:8000/api/v1/tasks/${address.toString()}/update-task'),
       body: jsonEncode(data),
       headers: {'Content-type': 'application/json'},
     ); //update task url here
@@ -184,11 +195,16 @@ class _TabPanelState extends State<TabPanel>
   }
 
   Future<void> _gettasks() async {
+    print(activetasks.length);
+    tasks.clear();
+    activetasks.clear();
+    inactivetasks.clear();
 
     var address = addressBox.read('selected_address');
-
+    // print(addressBox.read('selected_address'));
+    print(address);
     var response = await http.get(
-      Uri.parse('http://localhost:8000/api/v1/tasks/${address}/get-tasks-info'),
+      Uri.parse('http://localhost:8000/api/v1/tasks/${address.toString()}/get-tasks-info'),
     ); //tasks url here
 
     if (response.statusCode == 200) {
@@ -216,6 +232,9 @@ class _TabPanelState extends State<TabPanel>
             .add(TextEditingController(text: task['called'].toString()));
       }
     }
+    setState(() {
+      
+    });
     } else if (response.statusCode == 404) {
       // print('not found');
       Get.snackbar('Not Found', '');
@@ -275,11 +294,11 @@ class _TabPanelState extends State<TabPanel>
                     controller: _tabController,
                     children: [
                       // Active Tab
-                      // activetasks.isEmpty
-                      //     ? const Center(
-                      //         child: Text('No Task Available'),
-                      //       )
-                      //     : 
+                      activetasks.isEmpty
+                          ? const Center(
+                              child: Text('No Task Available'),
+                            )
+                          : 
                       ListView.builder(
                               controller: _scrollController,
                               itemCount: activetasks.length,
@@ -408,11 +427,11 @@ class _TabPanelState extends State<TabPanel>
                               },
                             ),
                       // Passed Tab
-                      // inactivetasks.isEmpty
-                      //     ? const Center(
-                      //         child: Text('No Task Available'),
-                      //       )
-                      //     : 
+                      inactivetasks.isEmpty
+                          ? const Center(
+                              child: Text('No Task Available'),
+                            )
+                          : 
                           ListView.builder(
                               controller: _scrollController,
                               itemCount: inactivetasks.length,

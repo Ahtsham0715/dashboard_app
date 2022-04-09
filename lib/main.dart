@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
     ); //login url here
 
     if (response.statusCode == 200) {
-      Get.snackbar('Singin Successful', '');
+      Get.snackbar('Login Successful', '');
       // jsonDecode(response.body);
       addressBox.erase();
       Get.to(() => const MyHomePage(), arguments: jsonDecode(response.body)

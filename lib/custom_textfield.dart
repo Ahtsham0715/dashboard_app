@@ -73,9 +73,9 @@ Widget customTextFormField(
             ),
             // keyboardType: (title == "Price") ?
             // TextInputType.number : TextInputType.text,
-            inputFormatters: (title == "Price")
-                ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]
-                : null,
+            // inputFormatters: (title == "Price")
+            //     ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]
+            //     : null,
             controller: controllerName,
             validator: validationFunc,
             onSaved: onSavedFunc,
