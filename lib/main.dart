@@ -87,8 +87,8 @@ class _LoginPageState extends State<LoginPage> {
     } else if (response.statusCode == 422) {
     
       var errorDetails = jsonDecode(response.body);
-      Get.snackbar("${errorDetails['details']?[0]['type']}",
-          "${errorDetails['details']?[0]['msg']} \n ${errorDetails['details']?[0]['loc']}");
+      Get.snackbar("${errorDetails['detail']?[0]['type']}",
+          "${errorDetails['detail']?[0]['msg']} \n ${errorDetails['detail']?[0]['loc']}");
     } else if (response.statusCode == 500) {
       // print('Internal Error');
       Get.snackbar('Internal Error', '');
@@ -141,8 +141,8 @@ class _LoginPageState extends State<LoginPage> {
     
       var errorDetails = jsonDecode(response.body);
       print(errorDetails);
-      Get.snackbar("422 ${errorDetails['details']?[0]['type']}",
-          "${errorDetails['details']?[0]['msg']} \n ${errorDetails['details']?[0]['loc']}");
+      Get.snackbar("422 ${errorDetails['detail']?[0]['type']}",
+          "${errorDetails['detail']?[0]['msg']} \n ${errorDetails['detail']?[0]['loc']}");
     } else if (response.statusCode == 500) {
       // print('Internal Error');
       Get.snackbar('Internal Error', '');

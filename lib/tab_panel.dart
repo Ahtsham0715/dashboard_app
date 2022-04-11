@@ -121,8 +121,8 @@ class _TabPanelState extends State<TabPanel>
       // print('Validation error');
       var error_details = jsonDecode(response.body);
       print(error_details);
-      Get.snackbar("${error_details['details']?[0]['type']}",
-          "${error_details['details']?[0]['msg']} \n ${error_details['details']?[0]['loc']}");
+      Get.snackbar("${error_details['detail']?[0]['type']}",
+          "${error_details['detail']?[0]['msg']} \n ${error_details['detail']?[0]['loc']}");
     } else if (response.statusCode == 500) {
       // print('Internal Error');
       Get.snackbar('Internal Error', '');
@@ -140,7 +140,7 @@ class _TabPanelState extends State<TabPanel>
     // print(id);
     // print(status);
    var address = addressBox.read('selected_address');
-print(address);
+print("updated address:  $address");
     var response = await http.post(
       Uri.parse(
           'http://localhost:8000/api/v1/tasks/${address.toString()}/update-task'),
@@ -181,8 +181,8 @@ print(address);
     } else if (response.statusCode == 422) {
       // print('Validation error');
       var error_details = jsonDecode(response.body);
-      Get.snackbar("${error_details['details']?[0]['type']}",
-          "${error_details['details']?[0]['msg']} \n ${error_details['details']?[0]['loc']}");
+      Get.snackbar("${error_details['detail']?[0]['type']}",
+          "${error_details['detail']?[0]['msg']} \n ${error_details['detail']?[0]['loc']}");
     } else if (response.statusCode == 500) {
       // print('Internal Error');
       Get.snackbar('Internal Error', '');
@@ -245,8 +245,8 @@ print(address);
       Get.snackbar('Not Found', '');
     } else if (response.statusCode == 422) {
       var error_details = jsonDecode(response.body);
-      Get.snackbar("${error_details['details']?[0]['type']}",
-          "${error_details['details']?[0]['msg']} \n ${error_details['details']?[0]['loc']}");
+      Get.snackbar("${error_details['detail']?[0]['type']}",
+          "${error_details['detail']?[0]['msg']} \n ${error_details['detail']?[0]['loc']}");
     } else if (response.statusCode == 500) {
       // print('Internal Error');
       Get.snackbar('Internal Error', '');
