@@ -63,15 +63,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> login_func() async {
-    Map data = {"password": _password.text};
-
-    Map body = {"message": data};
+    // Map data = {"password": 'True01'};
+    print(_password.text);
 
     var response = await http.post(
       Uri.parse('http://localhost:8000/api/v1/auth/login'),
-      body: jsonEncode(data),
+      body: jsonEncode({"password": _password.text.toString()}),
       headers: {'Content-type': 'application/json'},
     ); //login url here
+
 
     if (response.statusCode == 200) {
       Get.snackbar('Login Successful', '');
@@ -86,9 +86,9 @@ class _LoginPageState extends State<LoginPage> {
       Get.snackbar('Not Found', '');
     } else if (response.statusCode == 422) {
     
-      var error_details = jsonDecode(response.body);
-      Get.snackbar("${error_details['details']?[0]['type']}",
-          "${error_details['details']?[0]['msg']} \n ${error_details['details']?[0]['loc']}");
+      var errorDetails = jsonDecode(response.body);
+      Get.snackbar("${errorDetails['details']?[0]['type']}",
+          "${errorDetails['details']?[0]['msg']} \n ${errorDetails['details']?[0]['loc']}");
     } else if (response.statusCode == 500) {
       // print('Internal Error');
       Get.snackbar('Internal Error', '');
@@ -139,10 +139,10 @@ class _LoginPageState extends State<LoginPage> {
       Get.snackbar('Not Found', '');
     } else if (response.statusCode == 422) {
     
-      var error_details = jsonDecode(response.body);
-      print(error_details);
-      Get.snackbar("422 ${error_details['details']?[0]['type']}",
-          "${error_details['details']?[0]['msg']} \n ${error_details['details']?[0]['loc']}");
+      var errorDetails = jsonDecode(response.body);
+      print(errorDetails);
+      Get.snackbar("422 ${errorDetails['details']?[0]['type']}",
+          "${errorDetails['details']?[0]['msg']} \n ${errorDetails['details']?[0]['loc']}");
     } else if (response.statusCode == 500) {
       // print('Internal Error');
       Get.snackbar('Internal Error', '');
@@ -250,8 +250,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget showLoginDiaglog(_validatorFunc) {
-    final TextEditingController _password = TextEditingController();
-    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    
 
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -289,8 +288,6 @@ class _LoginPageState extends State<LoginPage> {
                     Expanded(
                         child: _customButton("Login", () {
                       if (_formKey.currentState!.validate()) {
-                        // Navigator.of(context).push(MaterialPageRoute(
-                        //     builder: (context) => const MyHomePage()));
                         login_func();
                         addressBox.erase();
                         //                    Get.to(() => MyHomePage(), arguments: {

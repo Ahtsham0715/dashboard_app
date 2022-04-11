@@ -59,15 +59,11 @@ class _TabPanelState extends State<TabPanel>
     _gettasks();
   }
 
-      Future<void> _boxlistener() async {
-        addressBox.listen(() {
-          // setState(() {
-            _gettasks();
-            // print(addressBox.read('selected_address'));
-              
-          // });
-        });
-      }
+  Future<void> _boxlistener() async {
+    addressBox.listen(() {
+      _gettasks();
+    });
+  }
 
   Future<void> _createtask() async {
     Map data = {
@@ -82,7 +78,7 @@ class _TabPanelState extends State<TabPanel>
       }
     };
 
-    Map body = {"message": data};
+    // Map body = {"message": data};
 
     var response = await http.post(
       Uri.parse('http://localhost:8000/api/v1/tasks/create'),
@@ -95,29 +91,29 @@ class _TabPanelState extends State<TabPanel>
       Navigator.pop(context);
       // jsonDecode(response.body);
       //successful operation
-       tasks = jsonDecode(response.body);
+      tasks = jsonDecode(response.body);
       List totalTasks = tasks['tasklist'];
-    for (var task in totalTasks) {
-      if (task['status'] == "active") {
-        activetasks.add(task);
-        _activeformKey.add(GlobalKey<FormState>());
-        _activeaddressController
-            .add(TextEditingController(text: tasks['address'].toString()));
-        _activepriceController
-            .add(TextEditingController(text: task['price'].toString()));
-        _activefunctionController
-            .add(TextEditingController(text: task['called'].toString()));
-      } else {
-        inactivetasks.add(task);
-        _inactiveformKey.add(GlobalKey<FormState>());
-        _inactiveaddressController
-            .add(TextEditingController(text: tasks['address'].toString()));
-        _inactivepriceController
-            .add(TextEditingController(text: task['price'].toString()));
-        _inactivefunctionController
-            .add(TextEditingController(text: task['called'].toString()));
+      for (var task in totalTasks) {
+        if (task['status'] == "active") {
+          activetasks.add(task);
+          _activeformKey.add(GlobalKey<FormState>());
+          _activeaddressController
+              .add(TextEditingController(text: tasks['address'].toString()));
+          _activepriceController
+              .add(TextEditingController(text: task['price'].toString()));
+          _activefunctionController
+              .add(TextEditingController(text: task['called'].toString()));
+        } else {
+          inactivetasks.add(task);
+          _inactiveformKey.add(GlobalKey<FormState>());
+          _inactiveaddressController
+              .add(TextEditingController(text: tasks['address'].toString()));
+          _inactivepriceController
+              .add(TextEditingController(text: task['price'].toString()));
+          _inactivefunctionController
+              .add(TextEditingController(text: task['called'].toString()));
+        }
       }
-    }
     } else if (response.statusCode == 404) {
       // print('not found');
       Get.snackbar('Not Found', '');
@@ -137,46 +133,48 @@ class _TabPanelState extends State<TabPanel>
   }
 
   Future<void> _updatetask(id, status) async {
-    Map data = {
-        "id": id.toString(),
-        "status": status.toString(),
-    };
-    var address = addressBox.read('selected_address');
-    Map body = {"message": data};
-
+//     Map data ={
+//   "id": id,
+//   "status": status
+// };
+    // print(id);
+    // print(status);
+   var address = addressBox.read('selected_address');
+print(address);
     var response = await http.post(
-      Uri.parse('http://localhost:8000/api/v1/tasks/${address.toString()}/update-task'),
-      body: jsonEncode(data),
+      Uri.parse(
+          'http://localhost:8000/api/v1/tasks/${address.toString()}/update-task'),
+      body: jsonEncode({"id": id.toString(), "status": status.toString()}),
       headers: {'Content-type': 'application/json'},
     ); //update task url here
 
     if (response.statusCode == 200) {
-      Get.snackbar('Task Created', '');
+      Get.snackbar('Task Updated', '');
       // jsonDecode(response.body);
       // successful operation
       tasks = jsonDecode(response.body);
       List totalTasks = tasks['tasklist'];
-    for (var task in totalTasks) {
-      if (task['status'] == "active") {
-        activetasks.add(task);
-        _activeformKey.add(GlobalKey<FormState>());
-        _activeaddressController
-            .add(TextEditingController(text: tasks['address'].toString()));
-        _activepriceController
-            .add(TextEditingController(text: task['price'].toString()));
-        _activefunctionController
-            .add(TextEditingController(text: task['called'].toString()));
-      } else {
-        inactivetasks.add(task);
-        _inactiveformKey.add(GlobalKey<FormState>());
-        _inactiveaddressController
-            .add(TextEditingController(text: tasks['address'].toString()));
-        _inactivepriceController
-            .add(TextEditingController(text: task['price'].toString()));
-        _inactivefunctionController
-            .add(TextEditingController(text: task['called'].toString()));
+      for (var task in totalTasks) {
+        if (task['status'] == "active") {
+          activetasks.add(task);
+          _activeformKey.add(GlobalKey<FormState>());
+          _activeaddressController
+              .add(TextEditingController(text: tasks['address'].toString()));
+          _activepriceController
+              .add(TextEditingController(text: task['price'].toString()));
+          _activefunctionController
+              .add(TextEditingController(text: task['called'].toString()));
+        } else {
+          inactivetasks.add(task);
+          _inactiveformKey.add(GlobalKey<FormState>());
+          _inactiveaddressController
+              .add(TextEditingController(text: tasks['address'].toString()));
+          _inactivepriceController
+              .add(TextEditingController(text: task['price'].toString()));
+          _inactivefunctionController
+              .add(TextEditingController(text: task['called'].toString()));
+        }
       }
-    }
     } else if (response.statusCode == 404) {
       // print('not found');
       Get.snackbar('Not Found', '');
@@ -194,52 +192,58 @@ class _TabPanelState extends State<TabPanel>
     }
   }
 
-  Future<void> _gettasks() async {
-    print(activetasks.length);
-    tasks.clear();
-    activetasks.clear();
-    inactivetasks.clear();
-
+  Future _gettasks() async {
     var address = addressBox.read('selected_address');
     // print(addressBox.read('selected_address'));
     print(address);
     var response = await http.get(
-      Uri.parse('http://localhost:8000/api/v1/tasks/${address.toString()}/get-tasks-info'),
+      Uri.parse(
+          'http://localhost:8000/api/v1/tasks/${address.toString()}/get-tasks-info'),
     ); //tasks url here
 
     if (response.statusCode == 200) {
+      tasks.clear();
+      activetasks.clear();
+      inactivetasks.clear();
+      print('gettasks');
+      _activeformKey.clear();
+      _activeaddressController.clear();
+      _activepriceController.clear();
+      _activefunctionController.clear();
+      _inactiveformKey.clear();
+      _inactiveaddressController.clear();
+      _inactivepriceController.clear();
+      _inactivefunctionController.clear();
       tasks = jsonDecode(response.body);
       //successful operation
-    List totalTasks = tasks['tasklist'];
-    for (var task in totalTasks) {
-      if (task['status'] == "active") {
-        activetasks.add(task);
-        _activeformKey.add(GlobalKey<FormState>());
-        _activeaddressController
-            .add(TextEditingController(text: tasks['address'].toString()));
-        _activepriceController
-            .add(TextEditingController(text: task['price'].toString()));
-        _activefunctionController
-            .add(TextEditingController(text: task['called'].toString()));
-      } else {
-        inactivetasks.add(task);
-        _inactiveformKey.add(GlobalKey<FormState>());
-        _inactiveaddressController
-            .add(TextEditingController(text: tasks['address'].toString()));
-        _inactivepriceController
-            .add(TextEditingController(text: task['price'].toString()));
-        _inactivefunctionController
-            .add(TextEditingController(text: task['called'].toString()));
+      List totalTasks = tasks['tasklist'];
+      for (var task in totalTasks) {
+        if (task['status'] == "active") {
+          activetasks.add(task);
+          _activeformKey.add(GlobalKey<FormState>());
+          _activeaddressController
+              .add(TextEditingController(text: tasks['address'].toString()));
+          _activepriceController
+              .add(TextEditingController(text: task['price'].toString()));
+          _activefunctionController
+              .add(TextEditingController(text: task['called'].toString()));
+
+        } else {
+          inactivetasks.add(task);
+          _inactiveformKey.add(GlobalKey<FormState>());
+          _inactiveaddressController
+              .add(TextEditingController(text: tasks['address'].toString()));
+          _inactivepriceController
+              .add(TextEditingController(text: task['price'].toString()));
+          _inactivefunctionController
+              .add(TextEditingController(text: task['called'].toString()));
+        }
       }
-    }
-    setState(() {
-      
-    });
+     
     } else if (response.statusCode == 404) {
       // print('not found');
       Get.snackbar('Not Found', '');
     } else if (response.statusCode == 422) {
-    
       var error_details = jsonDecode(response.body);
       Get.snackbar("${error_details['details']?[0]['type']}",
           "${error_details['details']?[0]['msg']} \n ${error_details['details']?[0]['loc']}");
@@ -250,6 +254,9 @@ class _TabPanelState extends State<TabPanel>
       // print('Error Occured. Try Again');
       Get.snackbar('Error Occured. Try Again', '');
     }
+     setState(() {
+       
+     });
   }
 
   @override
@@ -298,8 +305,7 @@ class _TabPanelState extends State<TabPanel>
                           ? const Center(
                               child: Text('No Task Available'),
                             )
-                          : 
-                      ListView.builder(
+                          : ListView.builder(
                               controller: _scrollController,
                               itemCount: activetasks.length,
                               itemBuilder: (context, index) {
@@ -413,8 +419,13 @@ class _TabPanelState extends State<TabPanel>
                                                         .validate()) {
                                                       // buttonsIndex[index] =
                                                       //     !pressedButton;
-                                                      _updatetask(activetasks[index]['id'], activetasks[index]['status']);
-
+                                                      _updatetask(
+                                                          activetasks[index]
+                                                                  ['id']
+                                                              .toString(),
+                                                          activetasks[index]
+                                                                  ['status']
+                                                              .toString());
                                                     }
                                                   });
                                                 }),
@@ -431,8 +442,7 @@ class _TabPanelState extends State<TabPanel>
                           ? const Center(
                               child: Text('No Task Available'),
                             )
-                          : 
-                          ListView.builder(
+                          : ListView.builder(
                               controller: _scrollController,
                               itemCount: inactivetasks.length,
                               itemBuilder: (context, index) {
@@ -547,7 +557,13 @@ class _TabPanelState extends State<TabPanel>
                                                         .validate()) {
                                                       // buttonsIndex[index] =
                                                       //     !pressedButton;
-                                                      _updatetask(inactivetasks[index]['id'], inactivetasks[index]['status']);
+                                                      _updatetask(
+                                                          inactivetasks[index]
+                                                                  ['id']
+                                                              .toString(),
+                                                          inactivetasks[index]
+                                                                  ['status']
+                                                              .toString());
                                                     }
                                                   });
                                                 }),
@@ -722,7 +738,6 @@ class _TabPanelState extends State<TabPanel>
                                         alignment: Alignment.center,
                                         enabled: true,
                                         value: value,
-                                    
                                         child: Text(
                                           value.toString(),
                                           style: const TextStyle(
@@ -764,7 +779,7 @@ class _TabPanelState extends State<TabPanel>
                                     onPressed: () {
                                       if (_createformKey.currentState!
                                           .validate()) {
-                                            _createtask();
+                                        _createtask();
                                         // Navigator.pop(context);
                                       }
                                     }),
