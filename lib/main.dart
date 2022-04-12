@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-    setWindowTitle("App Name");
+    setWindowTitle("Task Api");
     setWindowMinSize(const Size(1100, 720));
     setWindowMaxSize(Size.infinite);
   }

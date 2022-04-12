@@ -137,8 +137,6 @@ class _TabPanelState extends State<TabPanel>
 //   "id": id,
 //   "status": status
 // };
-    // print(id);
-    // print(status);
    var address = addressBox.read('selected_address');
 print("updated address:  $address");
     var response = await http.post(
@@ -150,10 +148,23 @@ print("updated address:  $address");
 
     if (response.statusCode == 200) {
       Get.snackbar('Task Updated', '');
+        tasks.clear();
+      activetasks.clear();
+      inactivetasks.clear();
+      print('updatetasks');
+      _activeformKey.clear();
+      _activeaddressController.clear();
+      _activepriceController.clear();
+      _activefunctionController.clear();
+      _inactiveformKey.clear();
+      _inactiveaddressController.clear();
+      _inactivepriceController.clear();
+      _inactivefunctionController.clear();
       // jsonDecode(response.body);
       // successful operation
       tasks = jsonDecode(response.body);
       List totalTasks = tasks['tasklist'];
+      print(totalTasks);
       for (var task in totalTasks) {
         if (task['status'] == "active") {
           activetasks.add(task);
@@ -175,6 +186,9 @@ print("updated address:  $address");
               .add(TextEditingController(text: task['called'].toString()));
         }
       }
+      setState(() {
+      
+    });
     } else if (response.statusCode == 404) {
       // print('not found');
       Get.snackbar('Not Found', '');
@@ -190,12 +204,13 @@ print("updated address:  $address");
       // print('Error Occured. Try Again');
       Get.snackbar('Error Occured. Try Again', '');
     }
+    
   }
 
   Future _gettasks() async {
     var address = addressBox.read('selected_address');
     // print(addressBox.read('selected_address'));
-    print(address);
+    // print(address);
     var response = await http.get(
       Uri.parse(
           'http://localhost:8000/api/v1/tasks/${address.toString()}/get-tasks-info'),
@@ -303,7 +318,7 @@ print("updated address:  $address");
                       // Active Tab
                       activetasks.isEmpty
                           ? const Center(
-                              child: Text('No Task Available'),
+                              child: Text('No Active Task Available'),
                             )
                           : ListView.builder(
                               controller: _scrollController,
@@ -440,7 +455,7 @@ print("updated address:  $address");
                       // Passed Tab
                       inactivetasks.isEmpty
                           ? const Center(
-                              child: Text('No Task Available'),
+                              child: Text('No Inactive Task Available'),
                             )
                           : ListView.builder(
                               controller: _scrollController,
